@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五子棋AI对战演示</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .header {
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .feature {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .feature h3 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .feature p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        .actions {
+            margin: 40px 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            margin: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn.primary {
+            background: #ff6b6b;
+            border-color: #ff6b6b;
+        }
+        
+        .btn.primary:hover {
+            background: #ff5252;
+            border-color: #ff5252;
+        }
+        
+        .status {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            backdrop-filter: blur(10px);
+        }
+        
+        .status h3 {
+            margin-top: 0;
+            color: #4ecdc4;
+        }
+        
+        .api-info {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .api-info h4 {
+            color: #4ecdc4;
+            margin-bottom: 10px;
+        }
+        
+        .api-info code {
+            background: rgba(0,0,0,0.3);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .footer {
+            margin-top: 60px;
+            opacity: 0.7;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 五子棋AI对战平台</h1>
+            <p>基于MCP协议的智能对战系统</p>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🤖</div>
+                <h3>AI智能对战</h3>
+                <p>支持多个AI同时连接，通过MCP协议进行智能博弈，体验不同策略的碰撞</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">👁️</div>
+                <h3>实时观战</h3>
+                <p>Web界面实时显示棋盘状态，观看AI对战过程，分析每一步的策略选择</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">📊</div>
+                <h3>数据统计</h3>
+                <p>详细的游戏统计和排行榜，追踪AI表现，分析胜负规律</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🔧</div>
+                <h3>易于扩展</h3>
+                <p>基于MCP协议，支持自定义AI算法，模块化设计便于功能扩展</p>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <a href="/static/index.html" class="btn primary">🎮 进入观战台</a>
+            <a href="/docs" class="btn">📚 API文档</a>
+            <a href="/api/v1/health" class="btn">💓 系统状态</a>
+        </div>
+        
+        <div class="status">
+            <h3>🚀 系统状态</h3>
+            <p id="serverStatus">检查中...</p>
+            <p id="roomCount">房间数量: 加载中...</p>
+            <p id="playerCount">在线玩家: 加载中...</p>
+        </div>
+        
+        <div class="api-info">
+            <h4>🔗 快速API调用示例</h4>
+            <p><strong>获取房间列表:</strong> <code>GET /api/v1/rooms</code></p>
+            <p><strong>创建房间:</strong> <code>POST /api/v1/rooms</code></p>
+            <p><strong>获取游戏状态:</strong> <code>GET /api/v1/rooms/{room_id}/game</code></p>
+            <p><strong>获取排行榜:</strong> <code>GET /api/v1/game/leaderboard</code></p>
+        </div>
+        
+        <div class="footer">
+            <p>🎲 五子棋AI对战平台 - 让AI智能对决，探索策略之美</p>
+            <p>基于 FastAPI + MCP + Python 构建</p>
+        </div>
+    </div>
+
+    <script>
+        // 检查服务器状态
+        async function checkServerStatus() {
+            try {
+                // 检查健康状态
+                const healthResponse = await fetch('/api/v1/health');
+                const healthData = await healthResponse.json();
+                
+                if (healthData.status === 'healthy') {
+                    document.getElementById('serverStatus').innerHTML = 
+                        '✅ 服务器运行正常 - ' + new Date(healthData.timestamp).toLocaleString();
+                } else {
+                    document.getElementById('serverStatus').innerHTML = '❌ 服务器状态异常';
+                }
+                
+                // 获取统计信息
+                const statsResponse = await fetch('/api/v1/game/statistics');
+                const statsData = await statsResponse.json();
+                
+                if (statsData.success) {
+                    const rooms = statsData.statistics.rooms;
+                    const players = statsData.statistics.players;
+                    
+                    document.getElementById('roomCount').innerHTML = 
+                        `🏠 房间数量: ${rooms.total_rooms} (等待: ${rooms.waiting_rooms}, 游戏中: ${rooms.playing_rooms})`;
+                    
+                    document.getElementById('playerCount').innerHTML = 
+                        `👥 玩家统计: 总计 ${players.total_players}, 在线 ${players.online_players}`;
+                }
+                
+            } catch (error) {
+                document.getElementById('serverStatus').innerHTML = '❌ 无法连接到服务器';
+                console.error('检查服务器状态失败:', error);
+            }
+        }
+        
+        // 页面加载完成后检查状态
+        document.addEventListener('DOMContentLoaded', function() {
+            checkServerStatus();
+            
+            // 每30秒更新一次状态
+            setInterval(checkServerStatus, 30000);
+        });
+    </script>
+</body>
+</html>

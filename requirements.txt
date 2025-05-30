@@ -1,0 +1,20 @@
+# 游戏服务端依赖
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.5.0
+python-multipart>=0.0.6
+
+# MCP依赖
+mcp[cli]>=1.0.0
+
+# 开发和测试依赖
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+httpx>=0.25.0
+black>=23.0.0
+isort>=5.12.0
+mypy>=1.7.0
+
+# 可选依赖
+redis>=5.0.0  # 如果需要Redis存储
+websockets>=12.0  # 如果需要WebSocket支持
