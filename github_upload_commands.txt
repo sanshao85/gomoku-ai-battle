@@ -1,0 +1,20 @@
+# GitHub上传命令
+# 请在创建GitHub仓库后执行以下命令：
+
+# 1. 添加远程仓库（请替换为您的实际GitHub仓库地址）
+git remote add origin https://github.com/sanshao85/gomoku-ai-battle.git
+
+# 2. 重命名主分支为main（GitHub标准）
+git branch -M main
+
+# 3. 推送到GitHub
+git push -u origin main
+
+# 如果遇到认证问题，可能需要：
+# - 使用Personal Access Token
+# - 或者使用SSH密钥
+# - 或者使用GitHub CLI
+
+# 验证推送成功
+git remote -v
+git log --oneline
