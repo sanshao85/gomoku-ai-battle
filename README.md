@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/sanshao85-gomoku-ai-battle-badge.png)](https://mseep.ai/app/sanshao85-gomoku-ai-battle)
+
 # 五子棋AI对战项目
 
 基于MCP (Model Context Protocol) 的五子棋AI对战平台，让AI通过MCP接口进行五子棋对战。
